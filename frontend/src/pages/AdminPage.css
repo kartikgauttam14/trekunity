@@ -1,0 +1,115 @@
+.admin-page {
+    padding: var(--space-10) 0 var(--space-16);
+}
+
+.admin-header {
+    margin-bottom: var(--space-8);
+}
+
+.admin-header h1 {
+    font-size: clamp(1.6rem, 3vw, 2rem);
+    margin-bottom: var(--space-1);
+}
+
+.admin-header p {
+    color: var(--clr-text-secondary);
+}
+
+/* Tabs */
+.admin-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--clr-border);
+    margin-bottom: var(--space-8);
+}
+
+.admin-tab {
+    padding: var(--space-3) var(--space-6);
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--clr-text-muted);
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: all var(--transition-fast);
+}
+
+.admin-tab.active,
+.admin-tab:hover {
+    color: var(--clr-primary-400);
+    border-bottom-color: var(--clr-primary-400);
+}
+
+/* Stats */
+.admin-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: var(--space-6);
+}
+
+.stat-card {
+    padding: var(--space-8);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+    text-align: center;
+}
+
+.stat-emoji {
+    font-size: 2.5rem;
+}
+
+.stat-value {
+    font-size: 2.2rem;
+    font-weight: 800;
+    font-family: var(--font-display);
+}
+
+.stat-label {
+    font-size: 0.875rem;
+    color: var(--clr-text-secondary);
+    font-weight: 500;
+}
+
+/* Search row */
+.admin-search-row {
+    margin-bottom: var(--space-5);
+}
+
+/* Table */
+.admin-table-wrap {
+    overflow-x: auto;
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--clr-border);
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+}
+
+.admin-table thead {
+    background: var(--clr-bg-700);
+}
+
+.admin-table th {
+    padding: var(--space-4) var(--space-5);
+    text-align: left;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--clr-text-muted);
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.admin-table td {
+    padding: var(--space-4) var(--space-5);
+    border-top: 1px solid var(--clr-border);
+    color: var(--clr-text-secondary);
+    vertical-align: middle;
+}
+
+.admin-table tbody tr:hover {
+    background: var(--clr-bg-glass);
+}

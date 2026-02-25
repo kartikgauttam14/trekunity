@@ -1,0 +1,111 @@
+import axios from 'axios';
+
+const api = axios.create({
+    baseURL: import.meta.env.VITE_API_URL || '/api',
+    withCredentials: true,
+    headers: { 'Content-Type': 'application/json' },
+});
+
+// Request interceptor: attach access token from localStorage
+api.interceptors.request.use((config) => {
+    const token = localStorage.getItem('access_token');
+    if (token) config.headers.Authorization = `Bearer ${token}`;
+    return config;
+});
+
+// Response interceptor: auto-refresh on 401
+let isRefreshing = false;
+let failedQueue = [];
+
+const processQueue = (error, token = null) => {
+    failedQueue.forEach((prom) => (error ? prom.reject(error) : prom.resolve(token)));
+    failedQueue = [];
+};
+
+api.interceptors.response.use(
+    (response) => response,
+    async (error) => {
+        const originalRequest = error.config;
+
+        if (error.response?.status === 401 && !originalRequest._retry) {
+            if (isRefreshing) {
+                return new Promise((resolve, reject) => {
+                    failedQueue.push({ resolve, reject });
+                }).then((token) => {
+                    originalRequest.headers.Authorization = `Bearer ${token}`;
+                    return api(originalRequest);
+                });
+            }
+
+            originalRequest._retry = true;
+            isRefreshing = true;
+
+            try {
+                const res = await axios.post('/api/auth/refresh', {}, { withCredentials: true });
+                const { accessToken } = res.data;
+                localStorage.setItem('access_token', accessToken);
+                processQueue(null, accessToken);
+                originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+                return api(originalRequest);
+            } catch (refreshError) {
+                processQueue(refreshError, null);
+                localStorage.removeItem('access_token');
+                window.location.href = '/login';
+                return Promise.reject(refreshError);
+            } finally {
+                isRefreshing = false;
+            }
+        }
+
+        return Promise.reject(error);
+    }
+);
+
+export default api;
+
+// ── Helper functions ──────────────────────────────────────────────
+
+export const authApi = {
+    register: (data) => api.post('/auth/register', data),
+    login: (data) => api.post('/auth/login', data),
+    logout: () => api.post('/auth/logout'),
+    refresh: () => api.post('/auth/refresh'),
+    me: () => api.get('/auth/me'),
+};
+
+export const tripsApi = {
+    getAll: (params) => api.get('/trips', { params }),
+    getById: (id) => api.get(`/trips/${id}`),
+    create: (data) => api.post('/trips', data),
+    update: (id, data) => api.put(`/trips/${id}`, data),
+    delete: (id) => api.delete(`/trips/${id}`),
+    join: (id) => api.post(`/trips/${id}/join`),
+    updateMember: (tripId, userId, data) => api.put(`/trips/${tripId}/members/${userId}`, data),
+};
+
+export const itineraryApi = {
+    getAll: (tripId) => api.get(`/trips/${tripId}/itinerary`),
+    create: (tripId, data) => api.post(`/trips/${tripId}/itinerary`, data),
+    update: (tripId, itemId, data) => api.put(`/trips/${tripId}/itinerary/${itemId}`, data),
+    delete: (tripId, itemId) => api.delete(`/trips/${tripId}/itinerary/${itemId}`),
+};
+
+export const expensesApi = {
+    getAll: (tripId) => api.get(`/trips/${tripId}/expenses`),
+    create: (tripId, data) => api.post(`/trips/${tripId}/expenses`, data),
+    delete: (tripId, expenseId) => api.delete(`/trips/${tripId}/expenses/${expenseId}`),
+    getBalances: (tripId) => api.get(`/trips/${tripId}/expenses/balances`),
+};
+
+export const usersApi = {
+    getById: (id) => api.get(`/users/${id}`),
+    update: (id, data) => api.put(`/users/${id}`, data),
+    delete: (id) => api.delete(`/users/${id}`),
+    getTrips: (id) => api.get(`/users/${id}/trips`),
+};
+
+export const notificationsApi = {
+    getAll: () => api.get('/notifications'),
+    markRead: (id) => api.put(`/notifications/${id}/read`),
+    markAllRead: () => api.put('/notifications/read-all'),
+};

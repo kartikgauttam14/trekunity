@@ -1,0 +1,130 @@
+.profile-page {
+    padding: var(--space-10) 0 var(--space-16);
+}
+
+.skeleton-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-6);
+    padding: var(--space-8);
+}
+
+.profile-header {
+    display: flex;
+    gap: var(--space-8);
+    padding: var(--space-8);
+    margin-bottom: var(--space-8);
+    align-items: flex-start;
+}
+
+.profile-avatar-wrap {
+    flex-shrink: 0;
+}
+
+.profile-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.profile-name-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+}
+
+.profile-name-row h1 {
+    font-size: 1.6rem;
+}
+
+.profile-bio {
+    color: var(--clr-text-secondary);
+    line-height: 1.7;
+    max-width: 600px;
+}
+
+.profile-joined {
+    font-size: 0.825rem;
+    color: var(--clr-text-muted);
+}
+
+.edit-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    max-width: 480px;
+}
+
+/* Trips */
+.profile-trips h2 {
+    font-size: 1.2rem;
+    margin-bottom: var(--space-6);
+}
+
+.profile-trip-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: var(--space-4);
+}
+
+.profile-trip-card {
+    text-decoration: none;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-trip-img {
+    height: 140px;
+    background: var(--clr-bg-600);
+}
+
+.profile-trip-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-trip-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+}
+
+.profile-trip-info {
+    padding: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    font-size: 0.85rem;
+}
+
+.profile-trip-info strong {
+    color: var(--clr-text-primary);
+    font-size: 0.9rem;
+}
+
+.profile-trip-info span {
+    color: var(--clr-text-muted);
+}
+
+.text-muted {
+    color: var(--clr-text-muted);
+}
+
+@media (max-width: 600px) {
+    .profile-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .profile-name-row {
+        justify-content: center;
+    }
+}

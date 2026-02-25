@@ -1,0 +1,195 @@
+.create-trip-page {
+    padding: var(--space-10) 0 var(--space-16);
+}
+
+.create-trip-header {
+    text-align: center;
+    margin-bottom: var(--space-10);
+}
+
+.create-trip-header h1 {
+    font-size: clamp(1.6rem, 3vw, 2rem);
+    margin-bottom: var(--space-2);
+}
+
+.create-trip-header p {
+    color: var(--clr-text-secondary);
+}
+
+/* Stepper */
+.stepper {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-8);
+    margin-bottom: var(--space-10);
+}
+
+.step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: 0.8rem;
+    color: var(--clr-text-muted);
+    font-weight: 500;
+    position: relative;
+}
+
+.step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 14px;
+    left: calc(100% + var(--space-2));
+    width: calc(var(--space-8) - var(--space-2) * 2);
+    height: 1px;
+    background: var(--clr-border);
+}
+
+.step-dot {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+    background: var(--clr-bg-600);
+    border: 2px solid var(--clr-border);
+    transition: all var(--transition-base);
+}
+
+.step.active .step-dot {
+    background: var(--clr-primary-500);
+    border-color: var(--clr-primary-400);
+    color: #fff;
+    box-shadow: var(--shadow-glow);
+}
+
+.step.done .step-dot {
+    background: var(--clr-success);
+    border-color: var(--clr-success);
+    color: #fff;
+}
+
+.step.active {
+    color: var(--clr-text-primary);
+}
+
+.step.done {
+    color: var(--clr-success);
+}
+
+/* Card */
+.create-trip-card {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: var(--space-10);
+}
+
+.form-step {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+}
+
+.form-step h2 {
+    font-size: 1.25rem;
+    margin-bottom: var(--space-2);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-5);
+}
+
+textarea.form-input {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    cursor: pointer;
+    color: var(--clr-text-secondary);
+    font-size: 0.9rem;
+}
+
+.checkbox-label input {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--clr-primary-500);
+}
+
+/* Review */
+.review-step h2 {
+    margin-bottom: var(--space-6);
+}
+
+.review-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-5);
+}
+
+.review-item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+}
+
+.review-item label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--clr-text-muted);
+    font-weight: 600;
+}
+
+.review-item strong {
+    font-size: 1rem;
+}
+
+.review-description {
+    margin-top: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.review-description label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--clr-text-muted);
+    font-weight: 600;
+}
+
+.review-description p {
+    color: var(--clr-text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.7;
+}
+
+/* Nav */
+.form-nav {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--space-3);
+    margin-top: var(--space-8);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--clr-border);
+}
+
+@media (max-width: 600px) {
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .review-grid {
+        grid-template-columns: 1fr;
+    }
+}
