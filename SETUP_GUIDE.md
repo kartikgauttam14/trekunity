@@ -74,7 +74,12 @@ Used for real-time ride pricing and automated connections.
 
 ## 🚀 Final Steps
 1. Fill in all the keys in `backend/.env` and `frontend/.env`.
-2. Generate random strings for `JWT_SECRET` and `JWT_REFRESH_SECRET` in `backend/.env`.
+2. **Generate JWT Secrets:** These are NOT from a website. You must create your own random strings.
+   - **Command:** Run this in your terminal to get a secure string: 
+     ```bash
+     node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+     ```
+   - Copy the output to `JWT_SECRET` and `JWT_REFRESH_SECRET` in `backend/.env`.
 3. Run migrations:
    ```bash
    cd backend
