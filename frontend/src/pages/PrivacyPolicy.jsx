@@ -79,9 +79,9 @@ const PrivacyPolicy = () => {
                         </p>
                         <address className="contact-address">
                             Trekunity Inc.<br />
-                            123 Adventure Way<br />
-                            Tech Valley, CA 94043<br />
-                            United States
+                            190, Gauttam Bahawan<br />
+                            Rattakhera, Safidon, Jind<br />
+                            Haryana, India - 126112
                         </address>
                     </section>
                 </div>
