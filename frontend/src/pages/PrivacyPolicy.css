@@ -1,0 +1,100 @@
+.privacy-page {
+    padding: var(--space-16) 0;
+    background: radial-gradient(circle at top right, rgba(99, 102, 241, 0.05), transparent),
+        radial-gradient(circle at bottom left, rgba(249, 115, 22, 0.05), transparent);
+}
+
+.privacy-header {
+    text-align: center;
+    margin-bottom: var(--space-12);
+}
+
+.privacy-header h1 {
+    font-size: clamp(2.5rem, 8vw, 4rem);
+    margin-bottom: var(--space-4);
+}
+
+.last-updated {
+    color: var(--clr-text-muted);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.privacy-content {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: var(--space-12);
+}
+
+.privacy-section {
+    margin-bottom: var(--space-10);
+}
+
+.privacy-section:last-child {
+    margin-bottom: 0;
+}
+
+.privacy-section h2 {
+    font-size: 1.5rem;
+    color: var(--clr-primary-400);
+    margin-bottom: var(--space-4);
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.privacy-section p {
+    color: var(--clr-text-primary);
+    margin-bottom: var(--space-4);
+    line-height: 1.8;
+}
+
+.privacy-section ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.privacy-section ul li {
+    position: relative;
+    padding-left: var(--space-6);
+    margin-bottom: var(--space-3);
+    color: var(--clr-text-secondary);
+    line-height: 1.6;
+}
+
+.privacy-section ul li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: var(--clr-accent-400);
+    font-weight: 900;
+}
+
+.privacy-section strong {
+    color: var(--clr-text-primary);
+}
+
+.contact-address {
+    font-style: normal;
+    background: var(--clr-bg-glass);
+    padding: var(--space-6);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--clr-border);
+    display: inline-block;
+    color: var(--clr-text-secondary);
+    line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+    .privacy-page {
+        padding: var(--space-10) 0;
+    }
+
+    .privacy-content {
+        padding: var(--space-6);
+    }
+
+    .privacy-header h1 {
+        font-size: 2.5rem;
+    }
+}

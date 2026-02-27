@@ -1,0 +1,121 @@
+.footer {
+    background: var(--clr-bg-800);
+    border-top: 1px solid var(--clr-border);
+    padding: var(--space-16) 0 var(--space-8);
+    margin-top: var(--space-12);
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 2fr;
+    gap: var(--space-12);
+    margin-bottom: var(--space-12);
+}
+
+.footer-brand .brand-link {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--clr-text-primary);
+    margin-bottom: var(--space-4);
+    display: block;
+}
+
+.footer-brand p {
+    color: var(--clr-text-secondary);
+    font-size: 0.95rem;
+    max-width: 300px;
+}
+
+.footer-links-group h4,
+.footer-newsletter h4 {
+    font-size: 1rem;
+    color: var(--clr-text-primary);
+    margin-bottom: var(--space-6);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.footer-links-group ul li {
+    margin-bottom: var(--space-3);
+}
+
+.footer-links-group ul li a {
+    color: var(--clr-text-secondary);
+    font-size: 0.95rem;
+    transition: color var(--transition-fast);
+}
+
+.footer-links-group ul li a:hover {
+    color: var(--clr-primary-400);
+}
+
+.footer-newsletter p {
+    color: var(--clr-text-secondary);
+    margin-bottom: var(--space-4);
+    font-size: 0.9rem;
+}
+
+.newsletter-form {
+    display: flex;
+    gap: var(--space-2);
+}
+
+.newsletter-form .form-input {
+    background: var(--clr-bg-900);
+}
+
+.footer-bottom {
+    padding-top: var(--space-8);
+    border-top: 1px solid var(--clr-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--clr-text-muted);
+    font-size: 0.875rem;
+}
+
+.social-links {
+    display: flex;
+    gap: var(--space-6);
+}
+
+.social-links a {
+    transition: color var(--transition-fast);
+}
+
+.social-links a:hover {
+    color: var(--clr-text-primary);
+}
+
+@media (max-width: 1024px) {
+    .footer-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-8);
+    }
+}
+
+@media (max-width: 768px) {
+    .footer {
+        padding: var(--space-12) 0 var(--space-6);
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-10);
+        text-align: center;
+    }
+
+    .footer-brand p {
+        margin: 0 auto;
+    }
+
+    .newsletter-form {
+        max-width: 400px;
+        margin: 0 auto;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        gap: var(--space-6);
+    }
+}

@@ -14,6 +14,8 @@ import RidesPage from './pages/RidesPage.jsx';
 import RentalsPage from './pages/RentalsPage.jsx';
 import HostDashboard from './pages/HostDashboard.jsx';
 import VerificationPage from './pages/VerificationPage.jsx';
+import PrivacyPolicy from './pages/PrivacyPolicy.jsx';
+import Footer from './components/Footer.jsx';
 
 const PrivateRoute = ({ children }) => {
     const user = useAuthStore((s) => s.user);
@@ -51,9 +53,11 @@ export default function App() {
                     <Route path="/rentals" element={<RentalsPage />} />
                     <Route path="/host" element={<PrivateRoute><HostDashboard /></PrivateRoute>} />
                     <Route path="/verify" element={<PrivateRoute><VerificationPage /></PrivateRoute>} />
+                    <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                     <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
             </main>
+            <Footer />
         </div>
     );
 }
