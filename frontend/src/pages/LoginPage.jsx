@@ -29,16 +29,16 @@ export default function LoginPage() {
             <div className="auth-bg-orb" />
             <div className="auth-card card">
                 <div className="auth-header">
-                    <span className="auth-icon">✈️</span>
+                    <span className="auth-icon">🚗</span>
                     <h1>Welcome back</h1>
-                    <p>Log in to your TripTogether account</p>
+                    <p>Log in to your Trekunity account</p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="auth-form">
                     <div className="form-group">
                         <label className="form-label" htmlFor="email">Email</label>
                         <input id="email" name="email" type="email" className="form-input"
-                            placeholder="you@example.com" value={form.email}
+                            placeholder="you@trekunity.com" value={form.email}
                             onChange={handleChange} required autoComplete="email" />
                     </div>
 

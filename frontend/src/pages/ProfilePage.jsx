@@ -108,7 +108,7 @@ export default function ProfilePage() {
                                         <div className="profile-trip-img">
                                             {trip.coverImageUrl
                                                 ? <img src={trip.coverImageUrl} alt={trip.title} />
-                                                : <div className="profile-trip-placeholder">✈️</div>
+                                                : <div className="profile-trip-placeholder">🚗</div>
                                             }
                                         </div>
                                         <div className="profile-trip-info">

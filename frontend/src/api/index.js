@@ -109,3 +109,13 @@ export const notificationsApi = {
     markRead: (id) => api.put(`/notifications/${id}/read`),
     markAllRead: () => api.put('/notifications/read-all'),
 };
+
+export const ridesApi = {
+    compare: (params) => api.get('/rides/compare', { params }),
+    getLinkedAccounts: () => api.get('/rides/linked-accounts'),
+    linkAccount: (data) => api.post('/rides/link-account', data),
+    sendOTP: (data) => api.post('/rides/auth/otp/send', data),
+    verifyOTP: (data) => api.post('/rides/auth/otp/verify', data),
+    book: (data) => api.post('/rides/book', data),
+    getMyRides: () => api.get('/rides/my'),
+};

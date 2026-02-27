@@ -24,13 +24,18 @@ export default function Navbar() {
             <div className="container navbar-inner">
                 {/* Logo */}
                 <Link to="/" className="navbar-logo">
-                    <span className="logo-icon">✈️</span>
-                    <span className="gradient-text font-display">TripTogether</span>
+                    <span className="logo-icon">🚗</span>
+                    <span className="gradient-text font-display">Trekunity</span>
                 </Link>
 
                 {/* Desktop Nav */}
                 <nav className="navbar-links hide-mobile">
                     <Link to="/trips" className={`nav-link ${isActive('/trips') ? 'active' : ''}`}>Explore Trips</Link>
+                    <Link to="/rides" className={`nav-link ${isActive('/rides') ? 'active' : ''}`}>Book a Ride</Link>
+                    <Link to="/rentals" className={`nav-link ${isActive('/rentals') ? 'active' : ''}`}>Rent a Car</Link>
+                    {user && (
+                        <Link to="/host" className={`nav-link ${isActive('/host') ? 'active' : ''}`}>Host a Vehicle</Link>
+                    )}
                     {user && (
                         <Link to="/trips/create" className={`nav-link ${isActive('/trips/create') ? 'active' : ''}`}>
                             + New Trip
@@ -72,6 +77,9 @@ export default function Navbar() {
             {menuOpen && (
                 <div className="mobile-menu">
                     <Link to="/trips" onClick={() => setMenuOpen(false)} className="mobile-link">Explore Trips</Link>
+                    <Link to="/rides" onClick={() => setMenuOpen(false)} className="mobile-link">Book a Ride</Link>
+                    <Link to="/rentals" onClick={() => setMenuOpen(false)} className="mobile-link">Rent a Car</Link>
+                    {user && <Link to="/host" onClick={() => setMenuOpen(false)} className="mobile-link">Host a Vehicle</Link>}
                     {user && <Link to="/trips/create" onClick={() => setMenuOpen(false)} className="mobile-link">+ New Trip</Link>}
                     {user?.role === 'ADMIN' && <Link to="/admin" onClick={() => setMenuOpen(false)} className="mobile-link">Admin</Link>}
                     {user

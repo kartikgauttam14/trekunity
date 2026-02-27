@@ -101,7 +101,7 @@ export default function TripDetailPage() {
 
                         {!isOrganizer && !isMember && trip.status === 'OPEN' && (
                             <button className="btn btn-primary w-full" onClick={handleJoin} disabled={isJoining}>
-                                {isJoining ? 'Sending request…' : '✈️ Request to Join'}
+                                {isJoining ? 'Sending request…' : '🚗 Request to Join'}
                             </button>
                         )}
                         {isOrganizer && <Link to={`/trips/${id}/edit`} className="btn btn-ghost w-full">✏️ Edit Trip</Link>}

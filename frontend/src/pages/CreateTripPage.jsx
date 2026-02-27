@@ -156,7 +156,7 @@ export default function CreateTripPage() {
                             ? <button className="btn btn-primary" onClick={() => setStep((s) => s + 1)}
                                 disabled={!form.title || !form.destination}>Next →</button>
                             : <button className="btn btn-primary" onClick={handleSubmit} disabled={isLoading || !form.startDate || !form.endDate}>
-                                {isLoading ? 'Creating…' : '🚀 Create Trip'}
+                                {isLoading ? 'Creating…' : '🚗 Create Trip'}
                             </button>
                         }
                     </div>

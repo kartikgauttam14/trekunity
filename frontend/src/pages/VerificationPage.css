@@ -1,0 +1,138 @@
+.verify-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+    background: #f1f5f9;
+    min-height: calc(100vh - 64px);
+}
+
+.verify-card {
+    background: white;
+    padding: 3rem;
+    border-radius: 32px;
+    max-width: 500px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05);
+}
+
+.verify-icon {
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+}
+
+.verify-card h1 {
+    font-size: 2rem;
+    color: #1e293b;
+    margin-bottom: 1rem;
+}
+
+.verify-card p {
+    color: #64748b;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+}
+
+.status-badge {
+    margin-bottom: 2rem;
+}
+
+.status-badge span {
+    padding: 0.5rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.status-badge .verified {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.status-badge .pending {
+    background: #fef9c3;
+    color: #854d0e;
+}
+
+.verification-steps {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.step {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    opacity: 0.5;
+    transition: opacity 0.3s;
+}
+
+.step.done {
+    opacity: 1;
+}
+
+.step-num {
+    width: 32px;
+    height: 32px;
+    background: #e2e8f0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: #64748b;
+}
+
+.done .step-num {
+    background: #2563eb;
+    color: white;
+}
+
+.step-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.step-text strong {
+    color: #1e293b;
+}
+
+.step-text span {
+    font-size: 0.85rem;
+    color: #64748b;
+}
+
+.digilocker-btn {
+    width: 100%;
+    padding: 1rem;
+    background: white;
+    border: 2px solid #e2e8f0;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.digilocker-btn:hover {
+    border-color: #2563eb;
+    background: #f8fafc;
+}
+
+.digilocker-btn img {
+    height: 30px;
+}
+
+.privacy-note {
+    font-size: 0.8rem !important;
+    margin-top: 2rem;
+    margin-bottom: 0 !important;
+}

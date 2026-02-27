@@ -18,6 +18,7 @@ enum Role {
   USER
   ORGANIZER
   ADMIN
+  HOST
 }
 
 enum TripStatus {
@@ -83,6 +84,13 @@ model User {
   notifications    Notification[]
   announcements    Announcement[]
   payments         Payment[]
+  vehicles         Vehicle[]
+  rentalBookings   RentalBooking[] @relation("Renter")
+  rentalListings   RentalListing[]
+  rideBookings     RideBooking[]
+  verifications    Verification[]
+  policyAcceptances PolicyAcceptance[]
+  linkedAccounts   LinkedAccount[]
 
   @@map("users")
 }
@@ -265,4 +273,127 @@ model Payment {
   trip Trip? @relation(fields: [tripId], references: [id])
 
   @@map("payments")
+}
+
+model Vehicle {
+  id              String   @id @default(uuid())
+  ownerId         String
+  make            String
+  model           String
+  year            Int
+  type            String   @default("CAR")
+  licensePlate    String   @unique
+  seats           Int
+  fuelType        String
+  transmission    String
+  images          String[]
+  rcUrl           String?
+  isVerified      Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  owner           User            @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  listings        RentalListing[]
+
+  @@map("vehicles")
+}
+
+model RentalListing {
+  id              String   @id @default(uuid())
+  vehicleId       String
+  hostId          String
+  pricePerDay     Float
+  location        String
+  description     String?
+  availableFrom   DateTime
+  availableTo     DateTime
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  vehicle         Vehicle         @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+  host            User            @relation(fields: [hostId], references: [id], onDelete: Cascade)
+  bookings        RentalBooking[]
+
+  @@map("rental_listings")
+}
+
+model RentalBooking {
+  id              String   @id @default(uuid())
+  listingId       String
+  renterId        String
+  startDate       DateTime
+  endDate         DateTime
+  totalPrice      Float
+  status          String   @default("PENDING")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  listing         RentalListing @relation(fields: [listingId], references: [id])
+  renter          User          @relation("Renter", fields: [renterId], references: [id])
+
+  @@map("rental_bookings")
+}
+
+model RideBooking {
+  id              String   @id @default(uuid())
+  userId          String
+  provider        String
+  providerRideId  String?
+  pickupLocation  String
+  dropoffLocation String
+  fare            Float
+  currency        String   @default("INR")
+  status          String   @default("BOOKED")
+  type            String
+  createdAt       DateTime @default(now())
+
+  user            User     @relation(fields: [userId], references: [id])
+
+  @@map("ride_bookings")
+}
+
+model Verification {
+  id              String   @id @default(uuid())
+  userId          String
+  documentType    String
+  documentNumber  String?
+  documentUrl     String?
+  digiLockerId    String?
+  status          String   @default("PENDING")
+  verifiedAt      DateTime?
+  createdAt       DateTime @default(now())
+
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("verifications")
+}
+
+model PolicyAcceptance {
+  id              String   @id @default(uuid())
+  userId          String
+  policyType      String
+  policyVersion   String
+  acceptedAt      DateTime @default(now())
+
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("policy_acceptances")
+}
+
+model LinkedAccount {
+  id              String   @id @default(uuid())
+  userId          String
+  provider        String   // UBER, OLA, RAPIDO
+  accessToken     String?
+  refreshToken    String?
+  expiresAt       DateTime?
+  isConnected     Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, provider])
+  @@map("linked_accounts")
 }

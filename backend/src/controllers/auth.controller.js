@@ -29,8 +29,16 @@ export const register = async (req, res) => {
 // POST /api/auth/login
 export const login = async (req, res) => {
     const { email, password } = req.body;
+    const normalizedEmail = email?.trim().toLowerCase();
 
-    const user = await prisma.user.findUnique({ where: { email } });
+    const user = await prisma.user.findFirst({
+        where: {
+            email: {
+                equals: normalizedEmail,
+                mode: 'insensitive'
+            }
+        }
+    });
     if (!user || !user.passwordHash) throw new AppError('Invalid credentials.', 401);
 
     const valid = await bcrypt.compare(password, user.passwordHash);

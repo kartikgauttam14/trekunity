@@ -1,0 +1,15 @@
+≡ƒî▒ Seeding database...
+PrismaClientKnownRequestError: 
+Invalid `prisma.user.upsert()` invocation:
+
+
+The table `public.users` does not exist in the current database.
+    at $n.handleRequestError (K:\project\triptogether\Travel-Together\node_modules\@prisma\client\runtime\library.js:121:7315)
+    at $n.handleAndLogRequestError (K:\project\triptogether\Travel-Together\node_modules\@prisma\client\runtime\library.js:121:6623)
+    at $n.request (K:\project\triptogether\Travel-Together\node_modules\@prisma\client\runtime\library.js:121:6307)
+    at async l (K:\project\triptogether\Travel-Together\node_modules\@prisma\client\runtime\library.js:130:9633)
+    at async main (file:///K:/project/triptogether/Travel-Together/backend/prisma/seed.js:11:19) {
+  code: 'P2021',
+  clientVersion: '5.22.0',
+  meta: { modelName: 'User', table: 'public.users' }
+}

@@ -3,9 +3,9 @@ import { useAuthStore } from '../store/authStore.js';
 import './HomePage.css';
 
 const HERO_STATS = [
-    { value: '2,400+', label: 'Trips Created' },
-    { value: '18,000+', label: 'Travelers' },
-    { value: '95+', label: 'Countries' },
+    { value: '0', label: 'Trips Created' },
+    { value: '1', label: 'Travelers' },
+    { value: '0', label: 'Countries' },
 ];
 
 const FEATURES = [
@@ -80,7 +80,7 @@ export default function HomePage() {
                 <div className="container cta-inner">
                     <div className="cta-orb" />
                     <h2>Ready to start your next adventure?</h2>
-                    <p>Join thousands of travelers who plan smarter with TripTogether.</p>
+                    <p>Join thousands of travelers who plan smarter with Trekunity.</p>
                     <Link to={user ? '/trips/create' : '/register'} className="btn btn-primary btn-lg">
                         {user ? 'Create a Trip' : 'Join for Free'}
                     </Link>
