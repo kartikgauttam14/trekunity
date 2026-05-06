@@ -4,6 +4,14 @@ import { AppError } from '../utils/AppError.js';
 // POST /api/rentals/listings
 export const createListing = async (req, res) => {
     const { vehicleId, pricePerDay, location, description, availableFrom, availableTo } = req.body;
+    const start = new Date(availableFrom);
+    const end = new Date(availableTo);
+
+    if (!vehicleId || !pricePerDay || !location || !availableFrom || !availableTo) {
+        throw new AppError('Vehicle, price, location, and availability dates are required.', 400);
+    }
+    if (Number(pricePerDay) <= 0) throw new AppError('Price per day must be greater than zero.', 400);
+    if (end <= start) throw new AppError('Available to date must be after available from date.', 400);
 
     // Verify vehicle ownership
     const vehicle = await prisma.vehicle.findUnique({ where: { id: vehicleId } });
@@ -17,8 +25,8 @@ export const createListing = async (req, res) => {
             pricePerDay: Number(pricePerDay),
             location,
             description,
-            availableFrom: new Date(availableFrom),
-            availableTo: new Date(availableTo),
+            availableFrom: start,
+            availableTo: end,
         },
         include: { vehicle: true },
     });
@@ -87,6 +95,22 @@ export const bookRental = async (req, res) => {
     const end = new Date(endDate);
     const days = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
     if (days <= 0) throw new AppError('End date must be after start date.', 400);
+    if (start < listing.availableFrom || end > listing.availableTo) {
+        throw new AppError('Selected dates are outside this vehicle availability window.', 400);
+    }
+    if (listing.hostId === req.user.id) {
+        throw new AppError('You cannot book your own vehicle listing.', 400);
+    }
+
+    const overlappingBooking = await prisma.rentalBooking.findFirst({
+        where: {
+            listingId,
+            status: { in: ['PENDING', 'CONFIRMED'] },
+            startDate: { lt: end },
+            endDate: { gt: start },
+        },
+    });
+    if (overlappingBooking) throw new AppError('This vehicle already has a booking request for the selected dates.', 409);
 
     const totalPrice = listing.pricePerDay * days;
 
@@ -123,5 +147,25 @@ export const getMyBookings = async (req, res) => {
         },
         orderBy: { createdAt: 'desc' },
     });
+    res.json({ success: true, data: bookings });
+};
+
+// GET /api/rentals/bookings/host
+export const getHostBookings = async (req, res) => {
+    const bookings = await prisma.rentalBooking.findMany({
+        where: {
+            listing: { hostId: req.user.id },
+        },
+        include: {
+            renter: { select: { id: true, name: true, email: true, avatarUrl: true } },
+            listing: {
+                include: {
+                    vehicle: true,
+                },
+            },
+        },
+        orderBy: { createdAt: 'desc' },
+    });
+
     res.json({ success: true, data: bookings });
 };

@@ -1,93 +1,66 @@
-import React, { useState, useEffect } from 'react';
-import './ServiceLoginModal.css';
-import { ridesApi } from '../api/index.js';
+import React, { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
+import { ridesApi } from '../api/index.js';
+import './ServiceLoginModal.css';
 
-const ServiceLoginModal = ({ isOpen, onClose, onConnected, linkedProviders }) => {
-    const [step, setStep] = useState('selection'); // selection, otp
-    const [activeService, setActiveService] = useState(null);
-    const [phone, setPhone] = useState('');
-    const [otp, setOtp] = useState('');
-    const [isOtpSent, setIsOtpSent] = useState(false);
+const SERVICE_META = {
+    UBER: { name: 'Uber', color: '#000000', icon: 'U', note: 'OAuth ride estimates and booking after Uber approval' },
+    OLA: { name: 'Ola', color: '#BDE32B', icon: 'O', note: 'Requires Ola partner app token and booking approval' },
+    RAPIDO: { name: 'Rapido', color: '#FFD100', icon: 'R', note: 'Requires Rapido partner API access' },
+    ZOOMCAR: { name: 'Zoomcar', color: '#10B981', icon: 'Z', note: 'Requires Zoomcar partner API access for self-drive rentals' },
+};
+
+export default function ServiceLoginModal({ isOpen, onClose, onConnected, linkedProviders }) {
+    const [providers, setProviders] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 
-    const services = [
-        { id: 'UBER', name: 'Uber', color: '#000000', icon: 'U', type: 'OAUTH' },
-        { id: 'OLA', name: 'Ola', color: '#BDE32B', icon: 'O', type: 'OTP' },
-        { id: 'RAPIDO', name: 'Rapido', color: '#FFD100', icon: 'R', type: 'OTP' }
-    ];
+    useEffect(() => {
+        if (!isOpen) return;
+
+        const loadProviders = async () => {
+            setIsLoading(true);
+            try {
+                const res = await ridesApi.getProviders();
+                setProviders(res.data.data);
+            } catch (err) {
+                toast.error(err.response?.data?.message || 'Unable to load provider status.');
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        loadProviders();
+    }, [isOpen]);
 
     useEffect(() => {
         const handleMessage = (event) => {
-            if (event.data.type === 'UBER_CONNECTED') {
-                toast.success('Uber account linked successfully!');
+            if (event.data?.type === 'UBER_CONNECTED') {
+                toast.success('Uber connected successfully.');
                 onConnected('UBER');
                 onClose();
-            } else if (event.data.type === 'UBER_FAILED') {
-                toast.error('Failed to link Uber account.');
-                setIsLoading(false);
+            }
+            if (event.data?.type === 'UBER_FAILED') {
+                toast.error('Uber connection failed.');
             }
         };
 
         window.addEventListener('message', handleMessage);
         return () => window.removeEventListener('message', handleMessage);
-    }, [onConnected, onClose]);
+    }, [onClose, onConnected]);
 
-    const handleConnect = async (service) => {
+    const handleConnect = async (provider) => {
         setIsLoading(true);
         try {
-            const res = await ridesApi.linkAccount({ provider: service.id });
-
-            if (service.type === 'OAUTH') {
-                // Open real Uber OAuth popup
-                const width = 500, height = 600;
+            const res = await ridesApi.linkAccount({ provider: provider.provider });
+            if (res.data.redirectUrl) {
+                const width = 520;
+                const height = 680;
                 const left = (window.innerWidth - width) / 2;
                 const top = (window.innerHeight - height) / 2;
-                window.open(
-                    res.data.redirectUrl,
-                    'Uber Login',
-                    `width=${width},height=${height},top=${top},left=${left}`
-                );
-            } else {
-                setActiveService(service);
-                setStep('otp');
+                window.open(res.data.redirectUrl, `${provider.provider} Login`, `width=${width},height=${height},top=${top},left=${left}`);
             }
         } catch (err) {
-            console.error(err);
-            toast.error('Failed to initiate login.');
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    const handleRequestOTP = async (e) => {
-        e.preventDefault();
-        if (phone.length < 10) return toast.error('Enter valid phone number');
-        setIsLoading(true);
-        try {
-            await ridesApi.sendOTP({ provider: activeService.id, phone });
-            toast.success(`OTP sent to ${phone}`);
-            setIsOtpSent(true);
-        } catch (err) {
-            toast.error('Failed to send OTP.');
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    const handleVerifyOTP = async (e) => {
-        e.preventDefault();
-        setIsLoading(true);
-        try {
-            await ridesApi.verifyOTP({ provider: activeService.id, phone, otp });
-            toast.success(`${activeService.name} account connected!`);
-            onConnected(activeService.id);
-            setStep('selection');
-            setActiveService(null);
-            setPhone('');
-            setOtp('');
-        } catch (err) {
-            toast.error('Invalid OTP. Please try again.');
+            toast.error(err.response?.data?.message || 'Provider connection is not available.');
         } finally {
             setIsLoading(false);
         }
@@ -97,95 +70,47 @@ const ServiceLoginModal = ({ isOpen, onClose, onConnected, linkedProviders }) =>
 
     return (
         <div className="modal-overlay" onClick={onClose}>
-            <div className="modal-content card" onClick={e => e.stopPropagation()}>
-                {step === 'selection' ? (
-                    <div className="fadeIn">
-                        <div className="modal-header">
-                            <h2>Connect Ride Accounts</h2>
-                            <button className="close-btn" onClick={onClose}>&times;</button>
-                        </div>
-                        <p className="modal-subtitle">Login with your official account to get real-time prices & one-click bookings.</p>
-
-                        <div className="service-list">
-                            {services.map(service => {
-                                const isLinked = linkedProviders.includes(service.id);
-                                return (
-                                    <div key={service.id} className="service-item card">
-                                        <div className="service-icon" style={{ backgroundColor: service.color }}>{service.icon}</div>
-                                        <div className="service-info">
-                                            <h3>{service.name}</h3>
-                                            <span>Real-time prices via {service.type === 'OAUTH' ? 'OAuth' : 'OTP'}</span>
-                                        </div>
-                                        <button
-                                            className={`btn ${isLinked ? 'btn-ghost' : 'btn-primary'} btn-sm`}
-                                            onClick={() => !isLinked && handleConnect(service)}
-                                            disabled={isLoading || isLinked}
-                                        >
-                                            {isLinked ? 'Connected' : 'Connect'}
-                                        </button>
-                                    </div>
-                                );
-                            })}
-                        </div>
-                        <button className="btn btn-accent" style={{ width: '100%', marginTop: '1.5rem' }} onClick={onClose}>Done</button>
+            <div className="modal-content card" onClick={(e) => e.stopPropagation()}>
+                <div className="fadeIn">
+                    <div className="modal-header">
+                        <h2>Connect Real Providers</h2>
+                        <button className="close-btn" onClick={onClose}>&times;</button>
                     </div>
-                ) : (
-                    <div className="fadeIn">
-                        <div className="modal-header">
-                            <button className="back-btn" onClick={() => { setStep('selection'); setIsOtpSent(false); setOtp(''); }}>←</button>
-                            <h2>{activeService.name} Login</h2>
-                            <span></span>
-                        </div>
-                        <form onSubmit={isOtpSent ? handleVerifyOTP : handleRequestOTP} className="otp-form">
-                            <p className="login-desc">We will send a real OTP to your mobile number registered with {activeService.name}.</p>
+                    <p className="modal-subtitle">
+                        Provider app-password and OTP login are not supported. Real comparison and booking require official provider credentials and approved API access.
+                    </p>
 
-                            <div className="form-group">
-                                <label className="form-label">Phone Number</label>
-                                <div className="phone-input-group">
-                                    <span className="prefix">+91</span>
-                                    <input
-                                        type="tel"
-                                        className="form-input"
-                                        placeholder="Enter 10-digit number"
-                                        value={phone}
-                                        onChange={e => setPhone(e.target.value)}
-                                        disabled={isOtpSent || isLoading}
-                                        required
-                                    />
-                                </div>
-                            </div>
+                    <div className="service-list">
+                        {isLoading && providers.length === 0 ? (
+                            <div className="service-item card">Loading providers...</div>
+                        ) : providers.map((provider) => {
+                            const meta = SERVICE_META[provider.provider] || {};
+                            const isLinked = linkedProviders.includes(provider.provider);
+                            const canConnect = provider.isConfigured && provider.provider === 'UBER';
 
-                            {!isOtpSent ? (
-                                <button type="submit" className="btn btn-primary" style={{ width: '100%', marginTop: '1.5rem' }} disabled={isLoading}>
-                                    {isLoading ? 'Sending...' : 'Send OTP'}
-                                </button>
-                            ) : (
-                                <div className="fadeIn">
-                                    <div className="form-group" style={{ marginTop: '1rem' }}>
-                                        <label className="form-label">Enter OTP</label>
-                                        <input
-                                            type="text"
-                                            className="form-input"
-                                            placeholder="4-digit OTP (Try 1234)"
-                                            value={otp}
-                                            onChange={e => setOtp(e.target.value)}
-                                            required
-                                            maxLength={4}
-                                        />
+                            return (
+                                <div key={provider.provider} className="service-item card">
+                                    <div className="service-icon" style={{ backgroundColor: meta.color }}>{meta.icon || provider.provider[0]}</div>
+                                    <div className="service-info">
+                                        <h3>{meta.name || provider.provider}</h3>
+                                        <span>{provider.isConfigured ? meta.note : provider.setup}</span>
                                     </div>
-                                    <button type="submit" className="btn btn-accent" style={{ width: '100%', marginTop: '1.5rem' }} disabled={isLoading}>
-                                        {isLoading ? 'Verifying...' : 'Verify & Link'}
+                                    <button
+                                        className={`btn ${isLinked ? 'btn-ghost' : 'btn-primary'} btn-sm`}
+                                        onClick={() => handleConnect(provider)}
+                                        disabled={isLoading || isLinked || !canConnect}
+                                        title={!canConnect && !isLinked ? provider.setup : undefined}
+                                    >
+                                        {isLinked ? 'Connected' : canConnect ? 'Connect' : 'Needs Setup'}
                                     </button>
                                 </div>
-                            )}
-
-                            {!isOtpSent && <div className="mock-hint">Real OTP flow: Uses the mobile provider's actual auth servers.</div>}
-                        </form>
+                            );
+                        })}
                     </div>
-                )}
+
+                    <button className="btn btn-accent" style={{ width: '100%', marginTop: '1.5rem' }} onClick={onClose}>Done</button>
+                </div>
             </div>
         </div>
     );
-};
-
-export default ServiceLoginModal;
+}

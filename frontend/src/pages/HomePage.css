@@ -5,60 +5,24 @@
 /* Hero */
 .hero {
     position: relative;
-    min-height: 90vh;
+    min-height: calc(100vh - 68px);
     display: flex;
     align-items: center;
     overflow: hidden;
+    background:
+        linear-gradient(110deg, rgba(8, 12, 16, 0.98) 0%, rgba(8, 12, 16, 0.9) 42%, rgba(8, 12, 16, 0.38) 100%),
+        url('https://images.unsplash.com/photo-1526772662000-3f88f10405ff?auto=format&fit=crop&w=1800&q=80') center/cover;
 }
 
-.hero-bg {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-}
-
-.hero-orb {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(80px);
-    opacity: 0.35;
-}
-
-.hero-orb-1 {
-    width: 600px;
-    height: 600px;
-    top: -200px;
-    right: -100px;
-    background: radial-gradient(circle, var(--clr-primary-500), transparent 70%);
-    animation: float 8s ease-in-out infinite;
-}
-
-.hero-orb-2 {
-    width: 400px;
-    height: 400px;
-    bottom: -100px;
-    left: -50px;
-    background: radial-gradient(circle, var(--clr-accent-500), transparent 70%);
-    animation: float 10s ease-in-out infinite reverse;
-}
-
-@keyframes float {
-
-    0%,
-    100% {
-        transform: translateY(0) scale(1);
-    }
-
-    50% {
-        transform: translateY(-30px) scale(1.05);
-    }
-}
-
-.hero-content {
+.home-hero-content {
     position: relative;
     z-index: 1;
-    padding: var(--space-20) 0;
-    max-width: 720px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(320px, 0.72fr);
+    align-items: center;
+    gap: var(--space-12);
+    padding-top: var(--space-16);
+    padding-bottom: var(--space-10);
 }
 
 .hero-tag {
@@ -74,16 +38,17 @@
 }
 
 .hero-title {
-    font-size: clamp(2.8rem, 7vw, 5rem);
+    font-size: clamp(2.6rem, 7vw, 5.4rem);
     font-weight: 800;
     line-height: 1.1;
     margin-bottom: var(--space-6);
+    max-width: 760px;
 }
 
 .hero-subtitle {
     font-size: 1.125rem;
     color: var(--clr-text-secondary);
-    max-width: 540px;
+    max-width: 620px;
     margin-bottom: var(--space-8);
     line-height: 1.7;
 }
@@ -96,19 +61,27 @@
 }
 
 .hero-stats {
+    grid-column: 1 / -1;
     display: flex;
-    gap: var(--space-10);
-    flex-wrap: wrap;
+    gap: var(--space-4);
+    max-width: 860px;
 }
 
 .hero-stat {
     display: flex;
     flex-direction: column;
     gap: 2px;
+    flex: 1;
+    min-width: 0;
+    padding: var(--space-4);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--clr-border);
+    border-radius: var(--radius-lg);
+    backdrop-filter: blur(10px);
 }
 
 .hero-stat-value {
-    font-size: 1.75rem;
+    font-size: 1.35rem;
     font-weight: 800;
     font-family: var(--font-display);
 }
@@ -119,9 +92,52 @@
     font-weight: 500;
 }
 
+.hero-panel {
+    position: relative;
+    min-height: 460px;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    border: 1px solid var(--clr-border-bright);
+    box-shadow: var(--shadow-lg);
+}
+
+.hero-panel img {
+    width: 100%;
+    height: 100%;
+    min-height: 460px;
+    object-fit: cover;
+}
+
+.hero-panel-overlay {
+    position: absolute;
+    left: var(--space-5);
+    right: var(--space-5);
+    bottom: var(--space-5);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding: var(--space-4);
+    background: rgba(8, 12, 16, 0.78);
+    border: 1px solid var(--clr-border-bright);
+    border-radius: var(--radius-lg);
+    backdrop-filter: blur(16px);
+}
+
+.hero-panel-overlay span {
+    color: var(--clr-text-secondary);
+    font-size: 0.85rem;
+}
+
+.hero-panel-overlay strong {
+    color: var(--clr-text-primary);
+    font-size: 0.95rem;
+}
+
 /* Features */
 .features-section {
-    padding: var(--space-20) 0;
+    padding: var(--space-16) 0;
+    background: var(--clr-bg-900);
 }
 
 .section-title {
@@ -144,10 +160,11 @@
 }
 
 .feature-card {
-    padding: var(--space-8);
+    padding: var(--space-6);
     display: flex;
     flex-direction: column;
     gap: var(--space-4);
+    border-radius: var(--radius-lg);
 }
 
 .feature-icon {
@@ -173,23 +190,10 @@
     position: relative;
     text-align: center;
     padding: var(--space-16);
-    background: var(--clr-bg-glass);
+    background: linear-gradient(135deg, rgba(249, 115, 22, 0.16), rgba(99, 102, 241, 0.12)), var(--clr-bg-800);
     border: 1px solid var(--clr-border);
-    border-radius: var(--radius-2xl);
+    border-radius: var(--radius-xl);
     overflow: hidden;
-}
-
-.cta-orb {
-    position: absolute;
-    top: -100px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 400px;
-    height: 400px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(249, 115, 22, 0.25), transparent 70%);
-    filter: blur(40px);
-    pointer-events: none;
 }
 
 .cta-inner h2 {
@@ -202,4 +206,83 @@
     color: var(--clr-text-secondary);
     margin-bottom: var(--space-8);
     position: relative;
+}
+
+@media (max-width: 900px) {
+    .hero {
+        min-height: auto;
+        align-items: flex-start;
+        background-position: center top;
+    }
+
+    .home-hero-content {
+        grid-template-columns: 1fr;
+        gap: var(--space-8);
+        padding-top: var(--space-12);
+    }
+
+    .hero-panel,
+    .hero-panel img {
+        min-height: 320px;
+    }
+}
+
+@media (max-width: 640px) {
+    .hero {
+        background:
+            linear-gradient(180deg, rgba(8, 12, 16, 0.9) 0%, rgba(8, 12, 16, 0.72) 42%, rgba(8, 12, 16, 1) 100%),
+            url('https://images.unsplash.com/photo-1526772662000-3f88f10405ff?auto=format&fit=crop&w=1000&q=80') center/cover;
+    }
+
+    .home-hero-content {
+        padding-top: var(--space-10);
+        padding-bottom: var(--space-8);
+    }
+
+    .hero-title {
+        font-size: 2.55rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1rem;
+    }
+
+    .hero-ctas,
+    .hero-ctas .btn {
+        width: 100%;
+    }
+
+    .hero-stats {
+        flex-direction: column;
+    }
+
+    .hero-panel {
+        min-height: 260px;
+    }
+
+    .hero-panel img {
+        min-height: 260px;
+    }
+
+    .hero-panel-overlay {
+        left: var(--space-3);
+        right: var(--space-3);
+        bottom: var(--space-3);
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-1);
+    }
+
+    .features-section,
+    .cta-section {
+        padding: var(--space-12) 0;
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .cta-inner {
+        padding: var(--space-8) var(--space-5);
+    }
 }

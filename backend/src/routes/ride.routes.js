@@ -7,13 +7,15 @@ import {
     linkAccount,
     handleUberCallback,
     sendOTP,
-    verifyOTP
+    verifyOTP,
+    getProviderStatus
 } from '../controllers/ride.controller.js';
 import { authenticate } from '../middleware/auth.middleware.js';
 
 export const rideRouter = Router();
 
 // Price & Bookings
+rideRouter.get('/providers', getProviderStatus);
 rideRouter.get('/compare', authenticate, getRideOptions);
 rideRouter.post('/book', authenticate, bookRide);
 rideRouter.get('/my', authenticate, getMyRides);

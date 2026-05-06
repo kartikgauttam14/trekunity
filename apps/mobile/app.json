@@ -1,0 +1,30 @@
+{
+  "expo": {
+    "name": "Trekunity",
+    "slug": "trekunity",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "trekunity",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "backgroundColor": "#080c10"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "android": {
+      "package": "com.trekunity.app",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#080c10"
+      }
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "single"
+    },
+    "extra": {
+      "apiUrl": "http://10.0.2.2:3001/api"
+    }
+  }
+}

@@ -3,9 +3,9 @@ import { useAuthStore } from '../store/authStore.js';
 import './HomePage.css';
 
 const HERO_STATS = [
-    { value: '0', label: 'Trips Created' },
-    { value: '1', label: 'Travelers' },
-    { value: '0', label: 'Countries' },
+    { value: 'Plan', label: 'Itineraries together' },
+    { value: 'Split', label: 'Expenses clearly' },
+    { value: 'Book', label: 'Rides and rentals' },
 ];
 
 const FEATURES = [
@@ -24,30 +24,39 @@ export default function HomePage() {
         <div className="home page-enter">
             {/* Hero */}
             <section className="hero">
-                <div className="hero-bg">
-                    <div className="hero-orb hero-orb-1" />
-                    <div className="hero-orb hero-orb-2" />
-                </div>
-                <div className="container hero-content">
-                    <p className="hero-tag">🌍 The Group Travel Platform</p>
-                    <h1 className="hero-title">
-                        Travel Together,<br />
-                        <span className="gradient-text">Better</span>
-                    </h1>
-                    <p className="hero-subtitle">
-                        Plan, coordinate, and enjoy group trips — with a shared itinerary builder,
-                        live chat, expense splitter, and more. All in one place.
-                    </p>
-                    <div className="hero-ctas">
-                        {user
-                            ? <Link to="/trips" className="btn btn-primary btn-lg">Browse Trips</Link>
-                            : <>
-                                <Link to="/register" className="btn btn-primary btn-lg">Get Started Free</Link>
-                                <Link to="/trips" className="btn btn-ghost btn-lg">Explore Trips</Link>
-                            </>
-                        }
+                <div className="container home-hero-content">
+                    <div className="hero-copy">
+                        <p className="hero-tag">Group trips, rides, rentals</p>
+                        <h1 className="hero-title">
+                            Travel Together,
+                            <span className="gradient-text"> Better</span>
+                        </h1>
+                        <p className="hero-subtitle">
+                            Plan the route, coordinate the crew, compare rides, rent cars, and keep shared costs simple from the first idea to the last ride home.
+                        </p>
+                        <div className="hero-ctas">
+                            {user
+                                ? <Link to="/trips" className="btn btn-primary btn-lg">Browse Trips</Link>
+                                : <>
+                                    <Link to="/register" className="btn btn-primary btn-lg">Get Started Free</Link>
+                                    <Link to="/trips" className="btn btn-ghost btn-lg">Explore Trips</Link>
+                                </>
+                            }
+                        </div>
                     </div>
-                    <div className="hero-stats">
+
+                    <div className="hero-panel" aria-label="Travel planning preview">
+                        <img
+                            src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80"
+                            alt="Friends planning a trip near a scenic road"
+                        />
+                        <div className="hero-panel-overlay">
+                            <span>Weekend Goa Run</span>
+                            <strong>4 travelers synced</strong>
+                        </div>
+                    </div>
+
+                    <div className="hero-stats" aria-label="Trekunity planning highlights">
                         {HERO_STATS.map((s) => (
                             <div key={s.label} className="hero-stat">
                                 <span className="hero-stat-value gradient-text">{s.value}</span>
@@ -78,7 +87,6 @@ export default function HomePage() {
             {/* CTA Banner */}
             <section className="cta-section">
                 <div className="container cta-inner">
-                    <div className="cta-orb" />
                     <h2>Ready to start your next adventure?</h2>
                     <p>Join thousands of travelers who plan smarter with Trekunity.</p>
                     <Link to={user ? '/trips/create' : '/register'} className="btn btn-primary btn-lg">

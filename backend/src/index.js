@@ -8,6 +8,7 @@ import cookieParser from 'cookie-parser';
 import rateLimit from 'express-rate-limit';
 import { Server } from 'socket.io';
 import dotenv from 'dotenv';
+import os from 'os';
 
 import { authRouter } from './routes/auth.routes.js';
 import { userRouter } from './routes/user.routes.js';
@@ -29,11 +30,25 @@ dotenv.config();
 
 const app = express();
 const httpServer = http.createServer(app);
+const PORT = process.env.PORT || 3001;
+
+const allowedOrigins = (process.env.FRONTEND_URLS || process.env.FRONTEND_URL || 'http://localhost:5173,http://127.0.0.1:5173')
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+const corsOptions = {
+  origin(origin, callback) {
+    if (!origin || origin === 'null' || allowedOrigins.includes(origin)) return callback(null, true);
+    return callback(new Error(`CORS blocked origin: ${origin}`));
+  },
+  credentials: true,
+};
 
 // Socket.IO
 const io = new Server(httpServer, {
   cors: {
-    origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+    origin: allowedOrigins,
     methods: ['GET', 'POST'],
     credentials: true,
   },
@@ -45,10 +60,7 @@ registerSocketHandlers(io);
 
 // Security middleware
 app.use(helmet());
-app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
-  credentials: true,
-}));
+app.use(cors(corsOptions));
 
 // Rate limiting
 const limiter = rateLimit({
@@ -72,6 +84,17 @@ if (process.env.NODE_ENV !== 'test') {
 // Health check
 app.get('/health', (_req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
+app.get('/api/config', (req, res) => {
+  const protocol = req.protocol;
+  const host = req.get('host');
+  res.json({
+    success: true,
+    apiBaseUrl: `${protocol}://${host}/api`,
+    socketUrl: `${protocol}://${host}`,
+    clients: ['web', 'desktop', 'android'],
+  });
 });
 
 // Root route
@@ -102,9 +125,12 @@ app.use('/api/verifications', verificationRouter);
 app.use(notFound);
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 3001;
-httpServer.listen(PORT, () => {
+httpServer.listen(PORT, '0.0.0.0', () => {
+  const lan = Object.values(os.networkInterfaces())
+    .flat()
+    .find((net) => net?.family === 'IPv4' && !net.internal)?.address;
   console.log(`🚀 Trekunity API running on http://localhost:${PORT}`);
+  if (lan) console.log(`📱 Android/other devices: http://${lan}:${PORT}/api`);
 });
 
 export { app, io };

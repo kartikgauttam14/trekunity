@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: import.meta.env.VITE_API_URL || '/api',
+    baseURL: import.meta.env.VITE_API_URL || (window.location.protocol === 'file:' ? 'http://127.0.0.1:3001/api' : '/api'),
     withCredentials: true,
     headers: { 'Content-Type': 'application/json' },
 });
@@ -41,7 +41,7 @@ api.interceptors.response.use(
             isRefreshing = true;
 
             try {
-                const res = await axios.post('/api/auth/refresh', {}, { withCredentials: true });
+                const res = await api.post('/auth/refresh');
                 const { accessToken } = res.data;
                 localStorage.setItem('access_token', accessToken);
                 processQueue(null, accessToken);
@@ -111,6 +111,7 @@ export const notificationsApi = {
 };
 
 export const ridesApi = {
+    getProviders: () => api.get('/rides/providers'),
     compare: (params) => api.get('/rides/compare', { params }),
     getLinkedAccounts: () => api.get('/rides/linked-accounts'),
     linkAccount: (data) => api.post('/rides/link-account', data),
@@ -118,4 +119,21 @@ export const ridesApi = {
     verifyOTP: (data) => api.post('/rides/auth/otp/verify', data),
     book: (data) => api.post('/rides/book', data),
     getMyRides: () => api.get('/rides/my'),
+};
+
+export const rentalsApi = {
+    getListings: (params) => api.get('/rentals/listings', { params }),
+    getById: (id) => api.get(`/rentals/listings/${id}`),
+    createListing: (data) => api.post('/rentals/listings', data),
+    book: (data) => api.post('/rentals/bookings', data),
+    getMyBookings: () => api.get('/rentals/bookings/my'),
+    getHostBookings: () => api.get('/rentals/bookings/host'),
+};
+
+export const vehiclesApi = {
+    create: (data) => api.post('/vehicles', data),
+    getMine: () => api.get('/vehicles/my'),
+    getById: (id) => api.get(`/vehicles/${id}`),
+    update: (id, data) => api.put(`/vehicles/${id}`, data),
+    delete: (id) => api.delete(`/vehicles/${id}`),
 };

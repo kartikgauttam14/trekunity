@@ -1,0 +1,39 @@
+{
+  "name": "trekunity-desktop",
+  "version": "1.0.0",
+  "private": true,
+  "main": "main.js",
+  "scripts": {
+    "dev": "electron .",
+    "build:win": "electron-builder --win nsis",
+    "build": "electron-builder --win nsis"
+  },
+  "devDependencies": {
+    "7zip-bin": "^5.2.0",
+    "electron": "31.7.7",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "com.trekunity.desktop",
+    "productName": "Trekunity",
+    "npmRebuild": false,
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "main.js",
+      "assets/icon.ico"
+    ],
+    "extraResources": [
+      {
+        "from": "../frontend/dist",
+        "to": "frontend-dist"
+      }
+    ],
+    "win": {
+      "icon": "assets/icon.ico",
+      "signAndEditExecutable": false,
+      "target": "nsis"
+    }
+  }
+}

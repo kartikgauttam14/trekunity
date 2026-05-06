@@ -1,12 +1,12 @@
 .rides-container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 2rem;
+    padding: var(--space-10) var(--space-6) var(--space-16);
     font-family: var(--font-sans);
 }
 
 .rides-header {
-    margin-bottom: 3rem;
+    margin-bottom: var(--space-8);
 }
 
 .rides-header h1 {
@@ -25,13 +25,14 @@
 
 .search-box {
     background: var(--clr-bg-800);
-    padding: 2rem;
-    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    border-radius: var(--radius-lg);
     box-shadow: var(--shadow-lg);
-    display: flex;
-    gap: 1.5rem;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 180px auto;
+    gap: var(--space-4);
     align-items: flex-end;
-    margin-bottom: 3rem;
+    margin-bottom: var(--space-10);
     border: 1px solid var(--clr-border);
 }
 
@@ -83,7 +84,7 @@
 
 .options-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 1fr));
     gap: 1.5rem;
 }
 
@@ -139,6 +140,11 @@
     color: #000;
 }
 
+.provider-logo.zoomcar {
+    background: #10b981;
+    color: #04130d;
+}
+
 .provider-info h3 {
     margin: 0;
     font-size: 1.1rem;
@@ -178,8 +184,10 @@
 
 .empty-state {
     text-align: center;
-    padding: 4rem;
+    padding: var(--space-12) var(--space-4);
     color: var(--clr-text-muted);
+    display: grid;
+    place-items: center;
 }
 
 .empty-state img {
@@ -189,13 +197,58 @@
     filter: grayscale(1);
 }
 
+.provider-message {
+    margin: 0 0 var(--space-8);
+    padding: var(--space-4);
+    background: rgba(245, 158, 11, 0.1);
+    border: 1px solid rgba(245, 158, 11, 0.25);
+    border-radius: var(--radius-md);
+    color: var(--clr-warning);
+    line-height: 1.5;
+}
+
 @media (max-width: 768px) {
-    .search-box {
+    .rides-container {
+        padding: var(--space-8) var(--space-4) var(--space-12);
+    }
+
+    .rides-header>div {
         flex-direction: column;
+        align-items: flex-start !important;
+        gap: var(--space-4);
+    }
+
+    .rides-header h1 {
+        font-size: 2rem;
+    }
+
+    .search-box {
         align-items: stretch;
+        grid-template-columns: 1fr;
+        padding: var(--space-4);
     }
 
     .options-grid {
         grid-template-columns: 1fr;
+    }
+
+    .ride-card {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: var(--space-5);
+    }
+
+    .price-info {
+        width: 100%;
+        text-align: left;
+    }
+
+    .book-btn,
+    .search-btn {
+        width: 100%;
+    }
+
+    .empty-state img {
+        width: min(210px, 70vw);
     }
 }

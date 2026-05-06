@@ -1,5 +1,5 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuthStore } from '../store/authStore.js';
 import toast from 'react-hot-toast';
 import './Navbar.css';
@@ -18,9 +18,17 @@ export default function Navbar() {
     };
 
     const isActive = (path) => location.pathname === path;
+    const downloads = [
+        { label: 'Android App', meta: 'APK for phones', href: '/downloads/Trekunity-Android.apk' },
+        { label: 'Computer Software', meta: 'Windows .exe setup', href: '/downloads/Trekunity-Windows-Setup.exe' },
+    ];
+
+    useEffect(() => {
+        setMenuOpen(false);
+    }, [location.pathname]);
 
     return (
-        <header className="navbar">
+        <header className={`navbar ${menuOpen ? 'menu-is-open' : ''}`}>
             <div className="container navbar-inner">
                 {/* Logo */}
                 <Link to="/" className="navbar-logo">
@@ -48,6 +56,17 @@ export default function Navbar() {
 
                 {/* Auth actions */}
                 <div className="navbar-actions hide-mobile">
+                    <div className="download-menu">
+                        <button className="btn btn-primary btn-sm download-trigger">Download</button>
+                        <div className="download-panel">
+                            {downloads.map((item) => (
+                                <a key={item.href} href={item.href} download className="download-option">
+                                    <span>{item.label}</span>
+                                    <small>{item.meta}</small>
+                                </a>
+                            ))}
+                        </div>
+                    </div>
                     {user ? (
                         <div className="user-menu">
                             <Link to={`/profile/${user.id}`} className="user-avatar-btn">
@@ -76,6 +95,14 @@ export default function Navbar() {
             {/* Mobile menu */}
             {menuOpen && (
                 <div className="mobile-menu">
+                    <div className="mobile-downloads">
+                        <p>Download Software</p>
+                        {downloads.map((item) => (
+                            <a key={item.href} href={item.href} download className="mobile-link" onClick={() => setMenuOpen(false)}>
+                                {item.label}
+                            </a>
+                        ))}
+                    </div>
                     <Link to="/trips" onClick={() => setMenuOpen(false)} className="mobile-link">Explore Trips</Link>
                     <Link to="/rides" onClick={() => setMenuOpen(false)} className="mobile-link">Book a Ride</Link>
                     <Link to="/rentals" onClick={() => setMenuOpen(false)} className="mobile-link">Rent a Car</Link>

@@ -4,15 +4,22 @@
   "private": true,
   "workspaces": [
     "frontend",
-    "backend"
+    "backend",
+    "apps/mobile",
+    "desktop"
   ],
   "scripts": {
     "dev": "concurrently \"npm run dev --workspace=backend\" \"npm run dev --workspace=frontend\"",
     "dev:frontend": "npm run dev --workspace=frontend",
     "dev:backend": "npm run dev --workspace=backend",
+    "dev:mobile": "npm run start --workspace=apps/mobile",
+    "dev:desktop": "npm run dev --workspace=desktop",
     "build": "npm run build:backend && npm run build:frontend",
     "build:frontend": "npm run build --workspace=frontend",
     "build:backend": "npm run db:generate --workspace=backend",
+    "build:mobile:web": "npm run build:web --workspace=apps/mobile",
+    "build:android:apk": "npm run build:android:apk --workspace=apps/mobile",
+    "build:desktop:exe": "npm run build:frontend && npm run build --workspace=desktop",
     "install:all": "npm install"
   },
   "devDependencies": {
