@@ -2,6 +2,8 @@
     "name": "trekunity-backend",
     "version": "1.0.0",
     "private": true,
+    "license": "UNLICENSED",
+    "author": "Techzolo",
     "type": "module",
     "main": "src/index.js",
     "scripts": {

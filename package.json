@@ -2,6 +2,8 @@
   "name": "trekunity",
   "version": "1.0.0",
   "private": true,
+  "license": "UNLICENSED",
+  "author": "Techzolo",
   "workspaces": [
     "frontend",
     "backend",

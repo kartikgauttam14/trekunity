@@ -199,3 +199,9 @@ Output: `desktop/release/Trekunity Setup 1.0.0.exe`
 - For a physical Android device, backend and phone must be on the same network.
 - Real ride fare comparison needs approved provider API credentials.
 - Debug APK is for testing. Production release needs a proper signing key.
+
+## License
+
+Copyright © 2026 **Techzolo**. All rights reserved.
+
+**DO NOT COPY.** This project is proprietary and not open-source. Unauthorized copying, distribution, or modification is strictly prohibited.
